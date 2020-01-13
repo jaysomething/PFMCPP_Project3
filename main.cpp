@@ -51,44 +51,157 @@ struct CarWash            //1) a U.D.T. with a random number of member variables
 /*
  1)
  */
+#include <string>
+struct Speaker
+{
+    float coneSize;
+    bool isPorted = true;
+    std::string brand;
+
+    struct Eq
+    {
+        std::string shape;
+        double freq = 0.0;
+        double gain = 0.0;
+
+        void setFreq(double freq);
+        void setGain(double gain);
+    };
+
+    bool toggleOnOff();
+    void turnOnEq(Eq eq1);
+};
 
 /*
  2)
  */
 
+struct Bass
+{
+    std::string brand;
+    int numberOfStrings = 5;
+    int scale = 34;
+    bool isActive = true;
+
+    void playInstrument();
+};
+
 /*
  3)
  */
+
+struct Chair
+{
+    std::string color = "black";
+    int price;
+    bool hasWheels = true;
+};
 
 /*
  4)
  */
 
+struct Mixer
+{
+    std::string manufacturer;
+    int numberOfChannels = 32;
+
+    struct Channel
+    {
+        struct Eq
+        {
+            std::string shape;
+            double freq = 0.0;
+            double gain = 0.0;
+
+            void setFreq(double freq);
+            void setGain(double gain);
+        };
+
+        struct Fader
+        {
+            double position = 0.0;
+        };
+
+        void adjustEq(Eq eq1);
+    };
+};
+
 /*
  5)
  */
+
+struct Synth
+{
+    int numberOfOscs = 3;
+    int numberOfFilters = 2;
+    bool hasKB = false;
+};
 
 /*
  6)
  */
 
+struct Room
+{
+    float length;
+    float width;
+    float height;
+    int numberOfDoors = 1;
+};
+
 /*
  7)
  */
+struct Mic
+{
+    std::string brand;
+    std::string micType = "condenser";
+    std::string polarPattern = "cardioid";
+    bool needsPhantom = true;
+};
 
 /*
  8)
  */
+struct AudioInterface
+{
+    int numberOfMicPres = 4;
+    int numberOfInputs = 8;
+    int numberOfOutputs = 8;
+    int numberOfHpOuts = 2;
+    bool hasDSP = true;
+};
+
 
 /*
  9)
  */
+struct Cable
+{
+    std::string type = "audio";
+    std::string connector = "XLR";
+    float length;
+};
+
 
 /*
  10)
  */
 
+struct Studio
+{
+    Mic vocalMic;
+    Synth synth1;
+    Bass bass1;
+
+    void switchOn (AudioInterface aInterface1);
+    void switchOn (Mixer mixer1);
+
+};
+
 #include <iostream>
+
 int main()
 {
     std::cout << "good to go!" << std::endl;
