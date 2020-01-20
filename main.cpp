@@ -37,8 +37,8 @@ struct Foot
     }
 };
 
-Foot leftFoot;
-Foot rightFoot;
+Foot leftFoot; FIXME this should be a member of Person
+Foot rightFoot; FIXME this should be a member of person
 
 struct Person
 {
@@ -52,7 +52,7 @@ struct Person
     void run(int howFast, bool startWithLeftFoot);
 };
 
-void Person::run(int howFast, bool startWithLeftFoot)
+void Person::run(int howFast, bool startWithLeftFoot) FIXME remove names of unused params
 {
     if (startWithLeftFoot)
     {
@@ -207,14 +207,14 @@ struct Mixer
     };
 };
 
-void Mixer::Channel::Eq::setFreq(double freq)
+void Mixer::Channel::Eq::setFreq(double freq) FIXME change your parameter name
 {
-    Channel::Eq::freq = freq;
+    Channel::Eq::freq = freq; FIXME don't use fully qualified name to target member var
 }
 
-void Mixer::Channel::Eq::setGain(double gain)
+void Mixer::Channel::Eq::setGain(double gain) FIXME change your parameter name
 {
-    Channel::Eq::gain = gain;
+    Channel::Eq::gain = gain; FIXME don't use fully qualified name to target member var
 }
 
 void Mixer::Channel::adjustEq(Eq eq1)
