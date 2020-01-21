@@ -48,10 +48,10 @@ struct Person
     Foot leftFoot;
     Foot rightFoot;
 
-    void run(bool startWithLeftFoot);
+    void run(int howFast, bool startWithLeftFoot); FIXME When I say remove param name, I mean just the name, not the param type
 };
 
-void Person::run(bool startWithLeftFoot)
+void Person::run(bool startWithLeftFoot) FIXME When I say remove param name, I mean just the name, not the param type
 {
     if (startWithLeftFoot)
     {
@@ -193,8 +193,8 @@ struct Mixer
             double freq = 0.0;
             double gain = 0.0;
 
-            void setFreq(double bandFreq);
-            void setGain(double bandGain);
+            void setFreq(double bandFreq); INFO the param name here doesn't need to be changed
+            void setGain(double bandGain); INFO the param name here doesn't need to be changed
         };
 
         struct Fader
@@ -206,13 +206,13 @@ struct Mixer
     };
 };
 
-void Mixer::Channel::Eq::setFreq(double bandFreq) 
+void Mixer::Channel::Eq::setFreq(double bandFreq) INFO: but the name here does need to be changed.
 {
     freq = bandFreq;
 }
 
-void Mixer::Channel::Eq::setGain(double bandGain)
-{
+void Mixer::Channel::Eq::setGain(double bandGain) INFO: but the name here does need to be changed.
+{ 
     gain = bandGain;
 }
 
