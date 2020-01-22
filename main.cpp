@@ -144,7 +144,6 @@ void Speaker::turnOnEq(Eq eq1)
 {
     eq1.isOn = true;
 }
-
 /*
  2)
  */
@@ -163,7 +162,6 @@ void Bass::playInstrument()
 {
     std::cout << "Playing bass" << std::endl;
 }
-
 /*
  3)
  */
@@ -174,7 +172,6 @@ struct Chair
     int price;
     bool hasWheels = true;
 };
-
 /*
  4)
  */
@@ -226,24 +223,20 @@ void Mixer::Channel::adjustEq(Eq eq1)
     std::cout << std::endl; 
     eq1.setFreq(freq);
 
-    
     std::cout << "Set gain to: ";
     std::cin >> gain;
     std::cout << std::endl;
     eq1.setGain(gain);
 }
-
 /*
  5)
  */
-
 struct Synth
 {
     int numberOfOscs = 3;
     int numberOfFilters = 2;
     bool hasKB = false;
 };
-
 /*
  6)
  */
@@ -255,7 +248,6 @@ struct Room
     float height;
     int numberOfDoors = 1;
 };
-
 /*
  7)
  */
@@ -266,7 +258,6 @@ struct Mic
     std::string polarPattern = "cardioid";
     bool needsPhantom = true;
 };
-
 /*
  8)
  */
@@ -279,8 +270,6 @@ struct AudioInterface
     int numberOfHpOuts = 2;
     bool hasDSP = true;
 };
-
-
 /*
  9)
  */
@@ -290,8 +279,6 @@ struct Cable
     std::string connector = "XLR";
     float length;
 };
-
-
 /*
  10)
  */
@@ -304,7 +291,6 @@ struct Studio
 
     void switchOn(AudioInterface aInterface1);
     void switchOn(Mixer mixer1);
-
 };
 
 void Studio::switchOn(AudioInterface aInterface1)
