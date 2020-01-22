@@ -12,9 +12,60 @@ Create a branch named Part2
     You'll need to insert the Person struct from the video in the space below.
  */
 
+#include <iostream>
 
+struct Foot
+{
+    bool isLeftFoot;
+    int sizeOfStep;
 
+    void stepForward()
+    {
+        if (isLeftFoot)
+        {
+            std::cout << "One left step forward" << std::endl;
+        }
+        else
+        {
+            std::cout << "One right step forward" << std::endl;
+        }
+    }
 
+    int stepSize()
+    {
+        return sizeOfStep;
+    }
+};
+
+struct Person
+{
+    int age;
+    int height;
+    float hairLength;
+    float GPA;
+    unsigned int SATScore;
+    int distanceTravelled;
+    Foot leftFoot;
+    Foot rightFoot;
+
+    void run(int, bool startWithLeftFoot);
+};
+
+void Person::run(int, bool startWithLeftFoot)
+{
+    if (startWithLeftFoot)
+    {
+        leftFoot.stepForward();
+        rightFoot.stepForward();
+    }
+    else
+    {
+        rightFoot.stepForward();
+        leftFoot.stepForward();
+    }
+
+    distanceTravelled += leftFoot.stepSize() + rightFoot.stepSize();
+}
 
  /*
  2) provide implementations for the member functions you declared in your 10 user-defined types from the previous video outside of your UDT definitions.
@@ -57,12 +108,14 @@ struct CarWash            //1) a U.D.T. with a random number of member variables
 #include <string>
 struct Speaker
 {
+    bool isOn;
     float coneSize;
     bool isPorted = true;
     std::string brand;
 
     struct Eq
     {
+        bool isOn;
         std::string shape;
         double freq = 0.0;
         double gain = 0.0;
@@ -75,6 +128,22 @@ struct Speaker
     void turnOnEq(Eq eq1);
 };
 
+bool Speaker::toggleOnOff()
+{
+    if (isOn)
+    {
+        isOn = false;
+        return false;
+    }
+
+    isOn = true;
+    return true;
+}
+
+void Speaker::turnOnEq(Eq eq1)
+{
+    eq1.isOn = true;
+}
 /*
  2)
  */
@@ -89,6 +158,10 @@ struct Bass
     void playInstrument();
 };
 
+void Bass::playInstrument()
+{
+    std::cout << "Playing bass" << std::endl;
+}
 /*
  3)
  */
@@ -99,13 +172,13 @@ struct Chair
     int price;
     bool hasWheels = true;
 };
-
 /*
  4)
  */
 
 struct Mixer
 {
+    bool isOn;
     std::string manufacturer;
     int numberOfChannels = 32;
 
@@ -130,17 +203,40 @@ struct Mixer
     };
 };
 
+void Mixer::Channel::Eq::setFreq(double bandFreq)
+{
+    freq = bandFreq;
+}
+
+void Mixer::Channel::Eq::setGain(double bandGain)
+{ 
+    gain = bandGain;
+}
+
+void Mixer::Channel::adjustEq(Eq eq1)
+{
+    double freq;
+    double gain;
+
+    std::cout << "Set frequency to: ";
+    std::cin >> freq;
+    std::cout << std::endl; 
+    eq1.setFreq(freq);
+
+    std::cout << "Set gain to: ";
+    std::cin >> gain;
+    std::cout << std::endl;
+    eq1.setGain(gain);
+}
 /*
  5)
  */
-
 struct Synth
 {
     int numberOfOscs = 3;
     int numberOfFilters = 2;
     bool hasKB = false;
 };
-
 /*
  6)
  */
@@ -152,7 +248,6 @@ struct Room
     float height;
     int numberOfDoors = 1;
 };
-
 /*
  7)
  */
@@ -163,20 +258,18 @@ struct Mic
     std::string polarPattern = "cardioid";
     bool needsPhantom = true;
 };
-
 /*
  8)
  */
 struct AudioInterface
 {
+    bool isOn;
     int numberOfMicPres = 4;
     int numberOfInputs = 8;
     int numberOfOutputs = 8;
     int numberOfHpOuts = 2;
     bool hasDSP = true;
 };
-
-
 /*
  9)
  */
@@ -186,8 +279,6 @@ struct Cable
     std::string connector = "XLR";
     float length;
 };
-
-
 /*
  10)
  */
@@ -198,12 +289,19 @@ struct Studio
     Synth synth1;
     Bass bass1;
 
-    void switchOn (AudioInterface aInterface1);
-    void switchOn (Mixer mixer1);
-
+    void switchOn(AudioInterface aInterface1);
+    void switchOn(Mixer mixer1);
 };
 
-#include <iostream>
+void Studio::switchOn(AudioInterface aInterface1)
+{
+    aInterface1.isOn = true;
+}
+
+void Studio::switchOn(Mixer mixer1)
+{
+    mixer1.isOn = true;   
+}
 
 int main()
 {
