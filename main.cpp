@@ -26,6 +26,8 @@
  */
 
 #include <iostream>
+#include <iomanip>
+
 namespace Example 
 {
 struct UDT  // my user defined type
@@ -79,18 +81,43 @@ struct Speaker
 {
     bool isOn;
     float coneSize;
-    bool isPorted = true;
+    bool isPorted;
     std::string brand;
+
+    Speaker()
+    {
+        isOn = false;
+        coneSize = 6.f;
+        isPorted = true;
+        brand = "ADAM";
+    }
 
     struct Eq
     {
         bool isOn;
         std::string shape;
-        double freq = 0.0;
-        double gain = 0.0;
+        double freq;
+        double gain;
 
-        void setFreq(double freq);
-        void setGain(double gain);
+        Eq()
+        {
+            isOn = false;
+            shape = "Bell";
+            freq = 200.0;
+            gain = 0.0;
+        }
+
+        void setFreq(double bandFreq)
+        {
+            freq = bandFreq;
+            std::cout << "Frequency set to " << freq << std::endl;
+        }
+
+        void setGain(double bandGain)
+        {
+            gain = bandGain;
+            std::cout << "Gain set to " << gain << std::endl;
+        }
     };
 
     bool toggleOnOff();
@@ -102,17 +129,21 @@ bool Speaker::toggleOnOff()
     if (isOn)
     {
         isOn = false;
+        std::cout << "Speaker is turned OFF" << std::endl;
         return false;
     }
 
     isOn = true;
+    std::cout << "Speaker is turned ON" << std::endl;
     return true;
 }
 
 void Speaker::turnOnEq(Eq eq1)
 {
     eq1.isOn = true;
+    std::cout << "EQ is turned ON" << std::endl;
 }
+
 /*
  2)
  */
@@ -120,9 +151,17 @@ void Speaker::turnOnEq(Eq eq1)
 struct Bass
 {
     std::string brand;
-    int numberOfStrings = 5;
-    int scale = 34;
-    bool isActive = true;
+    int numberOfStrings;
+    int scale;
+    bool isActive;
+
+    Bass()
+    {
+        brand = "Fender";
+        numberOfStrings = 5;
+        scale = 4;
+        isActive = true;
+    }
 
     void playInstrument();
 };
@@ -137,9 +176,16 @@ void Bass::playInstrument()
 
 struct Chair
 {
-    std::string color = "black";
+    std::string color;
     int price;
-    bool hasWheels = true;
+    bool hasWheels;
+
+    Chair()
+    {
+        color = "Black";
+        price = 100;
+        hasWheels = true;
+    }
 };
 /*
  4)
@@ -147,17 +193,32 @@ struct Chair
 
 struct Mixer
 {
+    std::string name;
     bool isOn;
     std::string manufacturer;
-    int numberOfChannels = 32;
+    int numberOfChannels;
+
+    Mixer()
+    {
+        isOn = false;
+        manufacturer = "Midas";
+        numberOfChannels = 32;
+    }
 
     struct Channel
     {
         struct Eq
         {
             std::string shape;
-            double freq = 0.0;
-            double gain = 0.0;
+            double freq;
+            double gain;
+
+            Eq()
+            {
+                shape = "Bell";
+                freq = 200.0;
+                gain = 0.0;
+            }
 
             void setFreq(double freq);
             void setGain(double gain);
@@ -165,7 +226,12 @@ struct Mixer
 
         struct Fader
         {
-            double position = 0.0;
+            double position;
+
+            Fader()
+            {
+                position = 0.0;
+            }
         };
 
         void adjustEq(Eq eq1);
@@ -175,11 +241,13 @@ struct Mixer
 void Mixer::Channel::Eq::setFreq(double bandFreq)
 {
     freq = bandFreq;
+    std::cout << "Frequency is set to " << bandFreq << std::endl;
 }
 
 void Mixer::Channel::Eq::setGain(double bandGain)
 { 
     gain = bandGain;
+    std::cout << "Gain is set to " << bandGain << std::endl;
 }
 
 void Mixer::Channel::adjustEq(Eq eq1)
@@ -189,12 +257,10 @@ void Mixer::Channel::adjustEq(Eq eq1)
 
     std::cout << "Set frequency to: ";
     std::cin >> freq;
-    std::cout << std::endl; 
     eq1.setFreq(freq);
 
     std::cout << "Set gain to: ";
     std::cin >> gain;
-    std::cout << std::endl;
     eq1.setGain(gain);
 }
 /*
@@ -202,9 +268,16 @@ void Mixer::Channel::adjustEq(Eq eq1)
  */
 struct Synth
 {
-    int numberOfOscs = 3;
-    int numberOfFilters = 2;
-    bool hasKB = false;
+    int numberOfOscs;
+    int numberOfFilters;
+    bool hasKB;
+
+    Synth()
+    {
+        numberOfFilters = 3;
+        numberOfFilters = 2;
+        hasKB = false;
+    }
 };
 /*
  6)
@@ -215,7 +288,15 @@ struct Room
     float length;
     float width;
     float height;
-    int numberOfDoors = 1;
+    int numberOfDoors;
+
+    Room()
+    {
+        length = 6.5f;
+        width = 5.f;
+        height = 3.f;
+        numberOfDoors = 2;
+    }
 };
 /*
  7)
@@ -223,30 +304,56 @@ struct Room
 struct Mic
 {
     std::string brand;
-    std::string micType = "condenser";
-    std::string polarPattern = "cardioid";
-    bool needsPhantom = true;
+    std::string micType;
+    std::string polarPattern;
+    bool needsPhantom;
+
+    Mic()
+    {
+        brand = "Neumann";
+        micType = "condenser";
+        polarPattern = "cardioid";
+        needsPhantom = true;
+    }
 };
 /*
  8)
  */
 struct AudioInterface
 {
+    std::string name;
     bool isOn;
-    int numberOfMicPres = 4;
-    int numberOfInputs = 8;
-    int numberOfOutputs = 8;
-    int numberOfHpOuts = 2;
-    bool hasDSP = true;
+    int numberOfMicPres;
+    int numberOfInputs;
+    int numberOfOutputs;
+    int numberOfHpOuts;
+    bool hasDSP;
+
+    AudioInterface()
+    {
+        isOn = false;
+        numberOfMicPres = 4;
+        numberOfInputs = 8;
+        numberOfOutputs = 8;
+        numberOfHpOuts = 2;
+        hasDSP = true;
+    }
 };
 /*
  9)
  */
 struct Cable
 {
-    std::string type = "audio";
-    std::string connector = "XLR";
+    std::string type;
+    std::string connector;
     float length;
+
+    Cable()
+    {
+        type = "audio";
+        connector = "XLR";
+        length = 5.f;
+    }
 };
 /*
  10)
@@ -265,15 +372,54 @@ struct Studio
 void Studio::switchOn(AudioInterface aInterface1)
 {
     aInterface1.isOn = true;
+    std::cout << aInterface1.name << " is turned ON" << std::endl;
 }
 
 void Studio::switchOn(Mixer mixer1)
 {
-    mixer1.isOn = true;   
+    mixer1.isOn = true;
+    std::cout << mixer1.name << " is turned ON" << std::endl;
 }
 
 int main()
 {
+    std::cout << std::fixed;
+    std::cout << std::setprecision(2);
+
     Example::main();
+    std::cout << std::endl;
+
+    Speaker speaker1;
+    Speaker::Eq eq1;
+    speaker1.toggleOnOff();
+    speaker1.turnOnEq(eq1);
+    eq1.setFreq(150.0);
+    eq1.setGain(3.0);
+    std::cout << std::endl;
+
+    Bass fender5;
+    fender5.playInstrument();
+    std::cout << std::endl;
+
+    Mixer midas32;
+    midas32.name = "Midas 32";
+    Mixer::Channel midasChannel1;
+    Mixer::Channel::Eq channelEq1;
+    midasChannel1.adjustEq(channelEq1);
+    std::cout << std::endl;
+
+    Room room1;
+
+    AudioInterface interface1;
+    interface1.name = "Apollo 8";
+
+    Cable audioCable;
+
+    Studio studio1;
+    studio1.switchOn(interface1);
+    studio1.switchOn(midas32);
+    std::cout << std::endl;
+
     std::cout << "good to go!" << std::endl;
 }
+
