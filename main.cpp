@@ -274,7 +274,7 @@ struct Mixer
     };
 
     // create an array of Channels
-    Channel channel[64];
+    Channel channel[64]; FIXME no raw arrays.  use std::vector
 
     void setChannelNum()
     {
