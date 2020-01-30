@@ -35,45 +35,44 @@ Create a branch named Part5
  */
 
 #include <iostream>
-namespace Example 
+#include <iomanip>
+#include <vector>
+
+namespace Example
 {
-struct Bar 
-{ 
-    int num = 0; 
-    Bar(int n) : num(n) { } 
+struct Bar
+{
+    int num = 0;
+    Bar(int n) : num(n) {}
 };
 struct Foo
 {
-    Bar scopeLifetimeFunc( int threshold, int startingVal ) //3), 4c) 
+    Bar scopeLifetimeFunc(int threshold, int startingVal) //3), 4c)
     {
-        Bar bar(startingVal);                //4a)
-        while( bar.num < threshold )         //4a) 
-        { 
-            bar.num += 1;                    //4a)
-            
-            if( bar.num >= threshold )       //4b)
+        Bar bar(startingVal);       //4a)
+        while (bar.num < threshold) //4a)
+        {
+            bar.num += 1; //4a)
+
+            if (bar.num >= threshold) //4b)
                 return bar;
         }
-        
-        return Bar {-1}; //if your startingValue >= threshold, the while loop never runs
+
+        return Bar{-1}; //if your startingValue >= threshold, the while loop never runs
     }
 };
 
 int main()
 {
     Foo foo;
-    auto bar = foo.scopeLifetimeFunc(3, 1);        //5) 
-    
-    std::cout << "bar.num: " << bar.num << std::endl;     //6) 
+    auto bar = foo.scopeLifetimeFunc(3, 1); //5)
+
+    std::cout << "bar.num: " << bar.num << std::endl; //6)
     return 0;
 }
-}
+} // namespace Example
 
 //call Example::main() in main()
-
-
-
-
 
 /*
  1)
@@ -81,10 +80,10 @@ int main()
 #include <string>
 struct Speaker
 {
-    bool isOn { false };
-    float coneSize { 6.0f };
-    bool isPorted { true };
-    std::string brand { "ADAM" };
+    bool isOn{false};
+    float coneSize{6.0f};
+    bool isPorted{true};
+    std::string brand{"ADAM"};
 
     Speaker() {}
 
@@ -99,7 +98,7 @@ struct Speaker
 
         void print()
         {
-            if(isOn)
+            if (isOn)
             {
                 std::cout << "EQ is ON" << std::endl;
             }
@@ -121,7 +120,20 @@ struct Speaker
         void setGain(double bandGain)
         {
             gain = bandGain;
-            std::cout << "Gain set to " << gain << " dB" <<  std::endl;
+            std::cout << "Gain set to " << gain << " dB" << std::endl;
+        }
+
+        void sweepFrequency(double freqStart, double freqEnd)
+        {
+            std::cout << "Begin sweep, starting from " << freqStart << std::endl;
+
+            for (freq = freqStart; freq <= freqEnd; freq++)
+            {
+                std::cout << freq << std::endl;
+            }
+
+            freq = freqEnd;
+            std::cout << "End sweep" << std::endl;
         }
     };
 
@@ -155,14 +167,16 @@ void Speaker::turnOnEq(Eq eq1)
 
 struct Bass
 {
-    std::string brand { "Fender" };
-    int numberOfStrings { 5 };
-    int scale { 34 };
-    bool isActive { true };
+    std::string brand{"Fender"};
+    int numberOfStrings{5};
+    int scale{34};
+    bool isActive{true};
+    std::string circleOfFourths[12]{"C", "G", "D", "A", "E", "B", "Gb", "Db", "Ab", "Eb", "Bb", "F"};
 
     Bass() {}
 
     void playInstrument();
+    void playOpenStrings(int numberOfStrings);
 };
 
 void Bass::playInstrument()
@@ -170,7 +184,7 @@ void Bass::playInstrument()
     std::cout << "Playing bass" << std::endl;
     std::cout << brand << " " << numberOfStrings << "-string" << std::endl;
     std::cout << scale << "' scale";
-    if(isActive)
+    if (isActive)
     {
         std::cout << " active bass" << std::endl;
     }
@@ -178,7 +192,21 @@ void Bass::playInstrument()
     {
         std::cout << " passive bass" << std::endl;
     }
-    
+}
+
+void Bass::playOpenStrings(int numStrings)
+{
+    int index{1};
+
+    if (numStrings == 6)
+    {
+        index = 0;
+    }
+
+    for (int i = 0; i < numStrings; i++)
+    {
+        std::cout << circleOfFourths[(index + i) % 12] << std::endl;
+    }
 }
 /*
  3)
@@ -199,28 +227,15 @@ struct Chair
 struct Mixer
 {
     std::string name;
-    bool isOn { false };
-    std::string manufacturer { "Midas" };
-    int numberOfChannels { 32 };
-
-    Mixer() {}
-
-    void print()
-    {
-        std::cout << manufacturer << " " << numberOfChannels << "-channel mixer is ";
-
-        if(isOn)
-        {
-            std::cout << "ON" << std::endl;
-        }
-        else
-        {
-            std::cout << "OFF" << std::endl;
-        }
-    }
+    bool isOn{true};
+    std::string manufacturer{"Midas"};
+    size_t numberOfChannels{32};
 
     struct Channel
     {
+        int number{0};
+        bool isMuted{false};
+
         struct Eq
         {
             std::string shape;
@@ -235,13 +250,72 @@ struct Mixer
 
         struct Fader
         {
-            double position { 0.0 };
+            double position{0.0};
 
             Fader() {}
         };
 
         void adjustEq(Eq eq1);
     };
+
+    // create a dynamic array of Channels
+    std::vector<Channel> channels;
+
+    Mixer() 
+    {
+        channels.reserve(numberOfChannels);
+        for (size_t i = 0; i < numberOfChannels; i++)
+        {
+            channels[i].number = int(i) + 1;
+        }
+    }
+
+    void print()
+    {
+        std::cout << manufacturer << " " << numberOfChannels << "-channel mixer is ";
+
+        if (isOn)
+        {
+            std::cout << "ON" << std::endl;
+        }
+        else
+        {
+            std::cout << "OFF" << std::endl;
+        }
+    }
+
+    void muteChannels(size_t channelStart, size_t channelEnd)
+    {
+        if (channelEnd > numberOfChannels)
+        {
+            channelEnd = numberOfChannels;
+        }
+
+        if (channelStart < 1)
+        {
+            channelStart = 1;
+        }
+
+        for (size_t i = channelStart - 1; i < channelEnd; i++)
+        {
+            channels[i].isMuted = true;
+        }
+    }
+
+    void showMuteStatus()
+    {
+        for (size_t i = 0; i < numberOfChannels; i++)
+        {
+            if (channels[i].isMuted)
+            {
+                std::cout << "Channel " << channels[i].number << " is muted" << std::endl;
+            }
+            else
+            {
+                std::cout << "Channel " << channels[i].number << " is ON" << std::endl;
+            }
+        }
+    }
 };
 
 void Mixer::Channel::Eq::setFreq(double bandFreq)
@@ -251,7 +325,7 @@ void Mixer::Channel::Eq::setFreq(double bandFreq)
 }
 
 void Mixer::Channel::Eq::setGain(double bandGain)
-{ 
+{
     gain = bandGain;
     std::cout << "Gain is set to " << bandGain << " dB" << std::endl;
 }
@@ -261,14 +335,15 @@ void Mixer::Channel::adjustEq(Eq eq1)
     double freq;
     double gain;
 
-    std::cout << "Set frequency to: ";
-    std::cin >> freq;
+    std::cout << "Set frequency to: " << std::endl;
+    freq = 80.0;
     eq1.setFreq(freq);
 
-    std::cout << "Set gain to: ";
-    std::cin >> gain;
+    std::cout << "Set gain to: " << std::endl;
+    gain = 1.0;
     eq1.setGain(gain);
 }
+
 /*
  5)
  */
@@ -286,10 +361,10 @@ struct Synth
 
 struct Room
 {
-    float length { 6.5f };
-    float width { 5.0f };
-    float height { 3.0f };
-    int numberOfDoors { 2 };
+    float length{6.5f};
+    float width{5.0f};
+    float height{3.0f};
+    int numberOfDoors{2};
 
     Room() {}
 };
@@ -311,12 +386,12 @@ struct Mic
 struct AudioInterface
 {
     std::string name;
-    bool isOn { false };
-    int numberOfMicPres { 4 };
-    int numberOfInputs { 8 };
-    int numberOfOutputs { 8 };
-    int numberOfHpOuts { 2 };
-    bool hasDSP { true };
+    bool isOn{false};
+    int numberOfMicPres{4};
+    int numberOfInputs{8};
+    int numberOfOutputs{8};
+    int numberOfHpOuts{2};
+    bool hasDSP{true};
 
     AudioInterface() {}
 };
@@ -368,17 +443,21 @@ int main()
     Speaker speaker1;
     Speaker::Eq eq1;
     speaker1.toggleOnOff();
-    // I thought I'd be able to assign true to eq1.isOn via the following member function...
     speaker1.turnOnEq(eq1);
-    // ...but this following function reveals that it's not the case. What have I not understood correctly here?
+    std::cout << std::endl;
+
+    eq1.sweepFrequency(80.0, 100.0);
+    std::cout << std::endl;
     eq1.print();
     std::cout << std::endl;
+
     eq1.setFreq(150);
     eq1.setGain(3.0);
     std::cout << std::endl;
 
     Bass fender5;
     fender5.playInstrument();
+    fender5.playOpenStrings(fender5.numberOfStrings);
     std::cout << std::endl;
 
     Mixer midas32;
@@ -386,10 +465,14 @@ int main()
     midas32.print();
     std::cout << std::endl;
 
-    Mixer::Channel midasChannel1;
-    Mixer::Channel::Eq channelEq1;
-    midasChannel1.adjustEq(channelEq1);
+    midas32.muteChannels(20, 33);
+    midas32.showMuteStatus();
     std::cout << std::endl;
+
+    // Mixer::Channel midasChannel1;
+    // Mixer::Channel::Eq channelEq1;
+    // midasChannel1.adjustEq(channelEq1);
+    // std::cout << std::endl;
 
     Room room1;
 
