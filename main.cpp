@@ -36,6 +36,7 @@ Create a branch named Part5
 
 #include <iostream>
 #include <iomanip>
+#include <vector>
 
 namespace Example
 {
@@ -228,23 +229,7 @@ struct Mixer
     std::string name;
     bool isOn{true};
     std::string manufacturer{"Midas"};
-    int numberOfChannels{32};
-
-    Mixer() {}
-
-    void print()
-    {
-        std::cout << manufacturer << " " << numberOfChannels << "-channel mixer is ";
-
-        if (isOn)
-        {
-            std::cout << "ON" << std::endl;
-        }
-        else
-        {
-            std::cout << "OFF" << std::endl;
-        }
-    }
+    size_t numberOfChannels{32};
 
     struct Channel
     {
@@ -273,18 +258,33 @@ struct Mixer
         void adjustEq(Eq eq1);
     };
 
-    // create an array of Channels
-    Channel channel[64]; FIXME no raw arrays.  use std::vector
+    // create a dynamic array of Channels
+    std::vector<Channel> channels;
 
-    void setChannelNum()
+    Mixer() 
     {
-        for (int i = 0; i < numberOfChannels; i++)
+        channels.reserve(numberOfChannels);
+        for (size_t i = 0; i < numberOfChannels; i++)
         {
-            channel[i].number = i + 1;
+            channels[i].number = int(i) + 1;
         }
     }
 
-    void muteChannels(int channelStart, int channelEnd)
+    void print()
+    {
+        std::cout << manufacturer << " " << numberOfChannels << "-channel mixer is ";
+
+        if (isOn)
+        {
+            std::cout << "ON" << std::endl;
+        }
+        else
+        {
+            std::cout << "OFF" << std::endl;
+        }
+    }
+
+    void muteChannels(size_t channelStart, size_t channelEnd)
     {
         if (channelEnd > numberOfChannels)
         {
@@ -296,23 +296,23 @@ struct Mixer
             channelStart = 1;
         }
 
-        for (int i = channelStart - 1; i < channelEnd; i++)
+        for (size_t i = channelStart - 1; i < channelEnd; i++)
         {
-            channel[i].isMuted = true;
+            channels[i].isMuted = true;
         }
     }
 
     void showMuteStatus()
     {
-        for (int i = 0; i < numberOfChannels; i++)
+        for (size_t i = 0; i < numberOfChannels; i++)
         {
-            if (channel[i].isMuted)
+            if (channels[i].isMuted)
             {
-                std::cout << "Channel " << channel[i].number << " is muted" << std::endl;
+                std::cout << "Channel " << channels[i].number << " is muted" << std::endl;
             }
             else
             {
-                std::cout << "Channel " << channel[i].number << " is ON" << std::endl;
+                std::cout << "Channel " << channels[i].number << " is ON" << std::endl;
             }
         }
     }
@@ -465,7 +465,6 @@ int main()
     midas32.print();
     std::cout << std::endl;
 
-    midas32.setChannelNum();
     midas32.muteChannels(20, 33);
     midas32.showMuteStatus();
     std::cout << std::endl;
